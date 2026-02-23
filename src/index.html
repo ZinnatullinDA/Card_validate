@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Credit Card Validator</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">Проверка банковской карты</h1>
+
+      <div class="card-widget" id="card-widget">
+        <div class="brands" id="brands">
+          <img data-brand="visa" alt="Visa" />
+          <img data-brand="mastercard" alt="Mastercard" />
+          <img data-brand="amex" alt="American Express" />
+          <img data-brand="diners" alt="Diners" />
+          <img data-brand="mir" alt="Мир" />
+        </div>
+
+        <div class="form">
+          <input
+            class="input"
+            id="card-number"
+            type="text"
+            inputmode="numeric"
+            autocomplete="cc-number"
+            placeholder="Введите номер карты"
+            aria-label="Номер карты"
+          />
+          <button class="btn" id="validate-btn" type="button">
+            Проверить карту
+          </button>
+        </div>
+
+        <div class="result" id="result" aria-live="polite"></div>
+      </div>
+    </div>
+  </body>
+</html>

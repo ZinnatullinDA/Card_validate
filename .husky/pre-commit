@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# === Цветовые коды ANSI для форматирования вывода ===
+RED='\033[0;31m'    # Красный (ошибки)
+GREEN='\033[0;32m'  # Зелёный (успех)
+YELLOW='\033[1;33m' # Жёлтый (инфо)
+BLUE='\033[1;34m'   # Синий (заголовки)
+NC='\033[0m'        # Сброс цвета
+
+# === Старт общего таймера ===
+total_start=$(date +%s)
+
+# Заголовок
+printf "${BLUE}🚀 Запуск pre-commit хуков...${NC}\n"
+
+# === Шаг 1: ESLint с автофиксами ===
+eslint_start=$(date +%s)
+printf "${YELLOW}🔍 Проверка и автоисправление ESLint...${NC}\n"
+npm run lint:fix
+if [ $? -ne 0 ]; then
+  printf "${RED}❌ Ошибки ESLint! Коммит отменён.${NC}\n"
+  exit 1
+fi
+eslint_end=$(date +%s)
+eslint_elapsed=$((eslint_end - eslint_start))
+printf "${GREEN}✅ ESLint пройден успешно за ${eslint_elapsed} сек.${NC}\n"
+
+# Добавляем исправленные файлы в индекс
+git add .
+
+# === Шаг 2: Проверка типизации TypeScript ===
+ts_start=$(date +%s)
+printf "${YELLOW}🔎 Проверка TypeScript...${NC}\n"
+npm run type-check
+if [ $? -ne 0 ]; then
+  printf "${RED}❌ Ошибки TypeScript! Коммит отменён.${NC}\n"
+  exit 1
+fi
+ts_end=$(date +%s)
+ts_elapsed=$((ts_end - ts_start))
+printf "${GREEN}✅ TypeScript пройден успешно за ${ts_elapsed} сек.${NC}\n"
+
+# === Завершение: Общее время выполнения ===
+total_end=$(date +%s)
+total_elapsed=$((total_end - total_start))
+total_minutes=$((total_elapsed / 60))
+total_seconds=$((total_elapsed % 60))
+
+printf "${BLUE}🎉 Всё чисто! Готовимся к коммиту...${NC}\n"
+printf "${BLUE}⏱ Общее время: ${total_minutes} мин ${total_seconds} сек${NC}\n"
+
+exit 0
